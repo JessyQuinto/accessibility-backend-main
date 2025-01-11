@@ -1,3 +1,4 @@
+//C:\Users\Jessy\Downloads\accessibility-backend-main\accessibility-backend-main\src\services\DocumentAnalyzer.js
 require('dotenv').config();
 const { DocumentAnalysisClient } = require("@azure/ai-form-recognizer");
 const { AzureKeyCredential } = require("@azure/ai-form-recognizer");

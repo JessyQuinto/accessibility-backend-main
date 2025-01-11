@@ -1,4 +1,5 @@
-const puppeteer = require('puppeteer'); // Cambiado de puppeteer-core a puppeteer
+//C:\Users\Jessy\Downloads\accessibility-backend-main\accessibility-backend-main\src\services\accessibilityScanner.js
+const puppeteer = require('puppeteer');
 const axeCore = require('axe-core');
 const fs = require('fs');
 const path = require('path');
