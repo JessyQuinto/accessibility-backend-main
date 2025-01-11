@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer'); // Cambiado de puppeteer-core a puppeteer
 const axeCore = require('axe-core');
 const fs = require('fs');
 const path = require('path');
@@ -25,35 +25,38 @@ class BrowserManager {
 
         const platform = os.platform();
         const paths = defaultPaths[platform] || [];
+        console.log('Buscando navegadores en las rutas:', paths);
 
-        // Buscar usando comandos del sistema
+        // Intentar buscar usando comandos del sistema
         try {
             const command = platform === 'win32' ? 'where chrome.exe' : 'which google-chrome';
             const browserPath = require('child_process').execSync(command).toString().trim().split('\n')[0];
             if (browserPath && fs.existsSync(browserPath)) {
+                console.log(`Navegador encontrado: ${browserPath}`);
                 return browserPath;
             }
         } catch (error) {
-            console.log('No se pudo encontrar el navegador usando comando del sistema');
+            console.log('No se pudo encontrar el navegador usando comando del sistema.');
         }
 
         // Buscar en rutas predefinidas
         for (const browserPath of paths) {
             if (fs.existsSync(browserPath)) {
+                console.log(`Navegador encontrado en ruta predefinida: ${browserPath}`);
                 return browserPath;
             }
         }
 
-        throw new Error(`No se pudo encontrar un navegador compatible en ${platform}`);
+        console.warn('No se encontró un navegador preinstalado. Usando Puppeteer con Chromium.');
+        return null; // Devolverá null si no se encuentra un navegador preinstalado
     }
 
     static async launch() {
         const browserPath = await this.findChromePath();
-        console.log(`Usando navegador: ${browserPath}`);
 
         return puppeteer.launch({
             headless: true,
-            executablePath: browserPath,
+            executablePath: browserPath || undefined, // Usar Chromium descargado si no hay navegador preinstalado
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
